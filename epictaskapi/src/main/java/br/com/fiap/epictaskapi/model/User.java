@@ -12,10 +12,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
+import br.com.fiap.epictaskapi.dto.UserDto;
 
 @Entity
 @Table(name = "TB_USER")
@@ -24,9 +33,16 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
     private String name;
+
     @Column(unique = true)
+    @Email
     private String email;
+
+    @JsonProperty(access = Access.WRITE_ONLY)
+    @Size(min = 8, max = 200)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -110,6 +126,18 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public UserDto toDto() {
+        return new UserDto(id, name, email);
     }
 
 }
