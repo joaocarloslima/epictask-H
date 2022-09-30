@@ -22,6 +22,10 @@ public class TaskService {
         return repository.findAll(paginacao);
     }
 
+    public List<Task> listAll(){
+        return repository.findAll();
+    }
+
     public void save(Task task) {
         repository.save(task);
     }
