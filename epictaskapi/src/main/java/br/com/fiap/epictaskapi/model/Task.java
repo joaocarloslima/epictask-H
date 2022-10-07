@@ -17,7 +17,7 @@ public class Task {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotBlank(message = "titulo é obrigatório")
+    @NotBlank
     private String title;
 
     @Size(min = 10, max = 250)
