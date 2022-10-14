@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import br.com.fiap.epictaskapi.model.Role;
 import br.com.fiap.epictaskapi.model.Task;
 import br.com.fiap.epictaskapi.model.User;
 import br.com.fiap.epictaskapi.repository.TaskRepository;
@@ -33,11 +34,20 @@ public class DatabaseSeed implements CommandLineRunner {
                             .name("João")
                             .email("joao@fiap.com")
                             .password(passwordEncoder.encode("123"))
-                            //.getRoles().add(new Role("USER"))   
+                            .githubuser("joaocarloslima")
+                            .withRole( new Role("ROLE_USER"))
                         );
 
+        userRepository.save( new User()
+                        .name("Maria")
+                        .email("maria@fiap.com")
+                        .password(passwordEncoder.encode("123"))
+                        .githubuser("maria")
+                        .withRole( new Role("ROLE_ADMIN"))  
+                    );
+
         taskRepository.saveAll(List.of( 
-            new Task("BD", "Modelar as tabelas", 150, 0),
+            new Task("BD", "Modelar as tabelas", 150, 100),
             new Task("Debug", "Modelar as tabelas", 20, 0),
             new Task("Cadastro", "Modelar as tabelas", 10, 0),
             new Task("Login", "Modelar as tabelas", 50, 0),

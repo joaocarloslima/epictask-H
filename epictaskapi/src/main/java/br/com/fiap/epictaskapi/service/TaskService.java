@@ -26,6 +26,10 @@ public class TaskService {
         return repository.findAll();
     }
 
+    public List<Task> listDone() {
+        return repository.findDone();
+    }
+
     public void save(Task task) {
         repository.save(task);
     }
@@ -37,5 +41,7 @@ public class TaskService {
     public Optional<Task> getById(Long id) {
         return repository.findById(id);
     }
+
+
 
 }

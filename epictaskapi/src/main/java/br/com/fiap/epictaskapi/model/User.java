@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -37,6 +38,9 @@ public class User implements UserDetails {
     @NotBlank
     private String name;
 
+    @NotBlank
+    private String githubuser;
+
     @Column(unique = true)
     @Email
     private String email;
@@ -45,7 +49,7 @@ public class User implements UserDetails {
     @Size(min = 8, max = 200)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST )
     private List<Role> roles = new ArrayList<>();
 
     public List<Role> getRoles() {
@@ -71,6 +75,18 @@ public class User implements UserDetails {
     public User password(String password) {
         Assert.notNull(password, "password is required");
         this.password = password;
+        return this;
+    }
+
+    public User githubuser(String githubuser) {
+        Assert.notNull(githubuser, "githubuser is required");
+        this.githubuser = githubuser;
+        return this;
+    }
+
+    public User withRole(Role role){
+        Assert.notNull(role, "role is required");
+        this.roles.add(role);
         return this;
     }
 
@@ -139,5 +155,25 @@ public class User implements UserDetails {
     public UserDto toDto() {
         return new UserDto(id, name, email);
     }
+
+    public String getGithubuser() {
+        return githubuser;
+    }
+
+    public void setGithubuser(String githubuser) {
+        this.githubuser = githubuser;
+    }
+
+    public String getAvatar(){
+        return "https://github.com/" + githubuser + ".png";
+    }
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", name=" + name + ", githubuser=" + githubuser + ", email=" + email + ", password="
+                + password + ", roles=" + roles + "]";
+    }
+
+    
 
 }

@@ -1,17 +1,22 @@
 package br.com.fiap.epictaskapi.controller.web;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.apache.catalina.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,15 +31,11 @@ public class TaskWebController {
     TaskService service;
 
     @GetMapping
-    public ModelAndView index(){
-        return new ModelAndView("task/index")
-                    .addObject("tasks", service.listAll());
-    }
+    public ModelAndView index(@RequestParam(defaultValue = "all") String filter, @PageableDefault(size = 5) Pageable pageable){
+        Page<Task> list = (filter.equals("done"))?(Page<Task>) service.listDone():service.listAll(pageable) ;
 
-    @GetMapping("done")
-    public ModelAndView done(){
-        return new ModelAndView("task/done")
-                    .addObject("tasks", service.listAll());
+        return new ModelAndView("task/index")
+                    .addObject("tasks", list);
     }
 
     @GetMapping("new")

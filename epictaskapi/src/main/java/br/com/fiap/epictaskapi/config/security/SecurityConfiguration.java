@@ -31,6 +31,12 @@ public class SecurityConfiguration{
                 .antMatchers(HttpMethod.DELETE, "/api/user/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/api/user/**").authenticated()
 
+                // Web
+                .antMatchers(HttpMethod.GET, "/task").authenticated()
+                .antMatchers(HttpMethod.GET, "/task/delete/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/task").hasRole("ADMIN")
+
+
                 // Infra
                 .antMatchers("/h2-console/**").permitAll()
                 
@@ -38,8 +44,12 @@ public class SecurityConfiguration{
             .and()
                 .csrf().disable()
                 .headers().frameOptions().disable()
+            //.and()
+                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .formLogin()
+                //.loginPage("/entrar")
+                .successForwardUrl("/task")
                 
         ;
 

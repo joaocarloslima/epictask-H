@@ -7,12 +7,21 @@
 </head>
 
 <header th:fragment="header(page)">
-    <h1>Epic Task</h1>
+    <div class="topo">
+        <h1>Epic Task</h1>
+        <div class="login-info">
+            <!--span sec:authentication="name"></!--span-->
+            <!--span th:text="${#authentication.name}"></!--span-->
+            <span sec:authentication="principal.name"></span>
+            <img class="avatar" th:src="${#authentication.principal.avatar}" alt="">
+            <a href="/logout"><span class="material-icons">logout</span></a>
+        </div>
+    </div>
 
     <nav>
         <ul>
             <li th:classappend="${page=='task'}?active"><a href="/task">pendentes</a></li>
-            <li th:classappend="${page=='done'}?active"><a href="/task/done">concluídas</a></li>
+            <li th:classappend="${page=='done'}?active"><a href="/task?filter=done">concluídas</a></li>
             <li><a href="/user">usuários</a></li>
         </ul>
     </nav>

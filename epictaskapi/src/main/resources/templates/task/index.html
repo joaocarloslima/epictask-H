@@ -4,8 +4,14 @@
 <body>
     <header th:insert="_template :: header('task')"></header>
 
-    <div class="toolbar">
-        <a class="button" href="/task/new">cadastrar tarefa</a>
+    <div class="toolbar" >
+        <a class="button" href="/task/new" sec:authorize-url="POST /task">cadastrar tarefa</a>
+    </div>
+
+    <div class="pagination">
+        <a th:href="${'/task?page=' + (tasks.number-1)}" th:if="${!tasks.first}"> anterior </a>
+        <span th:text="${tasks.number+1}"></span>
+        <a th:href="${'/task?page=' + (tasks.number+1)}" th:if="${!tasks.last}">próxima >> </a>
     </div>
 
     <div th:if="${message != null}" class="alert success">
@@ -29,7 +35,7 @@
                 <span th:text="${task.score + 'pts'}"></span>
             </div>
             <div class="actions">
-                <a th:href="${'/task/delete/' + task.id}">
+                <a th:href="${'/task/delete/' + task.id}" sec:authorize="hasRole('ADMIN')">
                     <span class="material-icons">delete</span>
                 </a>
                 <a th:href="${'/task/' + task.id}">
